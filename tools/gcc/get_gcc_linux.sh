@@ -35,16 +35,16 @@ SCRIPT_DIR="$(pwd)/$(dirname $0)"
 pushd ${SCRIPT_DIR} 2>&1 > /dev/null
 
 PKGNAME="gcc-arm-none-eabi"
-VERSION="5-2016-q3"
+VERSION="9-2020-q2"
 
-ARCHIVE_URL="https://developer.arm.com/-/media/Files/downloads/gnu-rm/5_4-2016q3/gcc-arm-none-eabi-5_4-2016q3-20160926-linux.tar.bz2"
-ARCHIVE_SHA1="e87bbefaccbb43d30c084faeb945f4e96e7ec780"
-ARCHIVE_NAME="gcc-arm-none-eabi-5_4-2016q3-20160926-linux.tar.bz2"
+ARCHIVE_URL="https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2020q2/gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2"
+ARCHIVE_MD5="2b9eeccc33470f9d3cda26983b9d2dc6"
+ARCHIVE_NAME="gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2"
 
 if [[ "${OSTYPE}" == "linux-gnu" ]]; then
-    echo ">> Assuming Linux on intel 32 bit platform."
+    echo ">> Assuming Linux on intel 64 bit platform."
 else
-    echo ">> This script is meant for Linux (intel 32 bit)."
+    echo ">> This script is meant for Linux (intel 64 bit)."
     popd 2>&1 > /dev/null
     exit 1
 fi
@@ -63,12 +63,12 @@ CURL=$(which curl) || assert_success "dependency not found..." || exit $?
 
 TAR=$(which tar) || assert_success "dependency not found..." || exit $?
 
-SHA1SUM=$(which sha1sum) || assert_success "dependency not found..." || exit $?
+MD5SUM=$(which md5sum) || assert_success "dependency not found..." || exit $?
 
 # test_sha1sum(sha1, path_to_file)
-test_sha1sum() {
-    SHA1=$(${SHA1SUM} "$2" | ${AWK} '{print $1};')
-    [[ "${SHA1}" != "$1" ]] && return 1
+test_md5sum() {
+    MD5=$(${MD5SUM} "$2" | ${AWK} '{print $1};')
+    [[ "${MD5}" != "$1" ]] && return 1
     return 0
 }
 
@@ -78,8 +78,8 @@ if [[ ! -f "${ARCHIVE_NAME}" ]]; then
     assert_success "Download of ${ARCHIVE_NAME} failed..." || exit $?
 fi
 
-test_sha1sum "${ARCHIVE_SHA1}" "${ARCHIVE_NAME}"
-assert_success "SHA1 mismatch. Try redownloading the archive..." || exit $?
+test_md5sum "${ARCHIVE_MD5}" "${ARCHIVE_NAME}"
+assert_success "MD5 mismatch. Try redownloading the archive..." || exit $?
 
 echo ">> Unpacking..."
 ${TAR} -jxf "${ARCHIVE_NAME}"
