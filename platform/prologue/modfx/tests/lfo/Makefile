@@ -12,7 +12,6 @@ else
     detected_OS := $(shell uname -s)
 endif
 
-
 PLATFORMDIR = ../../..
 PROJECTDIR = ../..
 TOOLSDIR = $(PLATFORMDIR)/../../tools
@@ -39,6 +38,7 @@ endif
 # Include project specific definition
 # #############################################################################
 
+include $(PLATFORMDIR)/../general.mk
 include ./project.mk
 
 # #############################################################################
@@ -48,7 +48,7 @@ include ./project.mk
 MCU = cortex-m4
 
 GCC_TARGET = arm-none-eabi-
-GCC_BIN_PATH = $(TOOLSDIR)/gcc/gcc-arm-none-eabi-5_4-2016q3/bin
+GCC_BIN_PATH = $(TOOLSDIR)/gcc/$(GCC_DIR)/bin
 
 CC   = $(GCC_BIN_PATH)/$(GCC_TARGET)gcc
 CXXC = $(GCC_BIN_PATH)/$(GCC_TARGET)g++
