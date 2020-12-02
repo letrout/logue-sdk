@@ -38,7 +38,7 @@ endif
 # Include project specific definition
 # #############################################################################
 
-include ../../platform.mk
+include $(PLATFORMDIR)/../general.mk
 include ./project.mk
 
 # #############################################################################
