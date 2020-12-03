@@ -35,12 +35,12 @@ SCRIPT_DIR="$(pwd)/$(dirname $0)"
 pushd ${SCRIPT_DIR} 2>&1 > /dev/null
 
 PKGNAME="gcc-arm-none-eabi"
-VERSION="5-2016-q3"
+VERSION="9-2020-q2"
 
-ARCHIVE_URL="https://developer.arm.com/-/media/Files/downloads/gnu-rm/5_4-2016q3/gcc-arm-none-eabi-5_4-2016q3-20160926-win32-zip.zip"
-ARCHIVE_SHA1="f6c05562b5f031bf79ec13c6f7311245c717be1b"
-ARCHIVE_NAME="gcc-arm-none-eabi-5_4-2016q3-20160926-win32.zip"
-UNPACKED_NAME="gcc-arm-none-eabi-5_4-2016q3"
+ARCHIVE_URL="https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2020q2/gcc-arm-none-eabi-9-2020-q2-update-win32.zip"
+ARCHIVE_MD5="184b3397414485f224e7ba950989aab6"
+ARCHIVE_NAME="gcc-arm-none-eabi-9-2020-q2-update-win32.zip"
+UNPACKED_NAME="gcc-arm-none-eabi-9-2020-q2-update"
 
 if [[ "${OSTYPE}" == "msys" ]]; then
     echo ">> Assuming msys platform."
@@ -64,12 +64,12 @@ CURL=$(which curl) || assert_success "dependency not found..." || exit $?
 
 UNZIP=$(which unzip) || assert_success "dependency not found..." || exit $?
 
-SHA1SUM=$(which sha1sum) || assert_success "dependency not found..." || exit $?
+MD5SUM=$(which md5sum) || assert_success "dependency not found..." || exit $?
 
-# test_sha1sum(sha1, path_to_file)
-test_sha1sum() {
-    SHA1=$(${SHA1SUM} "$2" | ${AWK} '{print $1};')
-    [[ "${SHA1}" != "$1" ]] && return 1
+# test_md5sum(sha1, path_to_file)
+test_md5sum() {
+    MD5=$(${MD5SUM} "$2" | ${AWK} '{print $1};')
+    [[ "${MD5}" != "$1" ]] && return 1
     return 0
 }
 
@@ -79,8 +79,8 @@ if [[ ! -f "${ARCHIVE_NAME}" ]]; then
     assert_success "Download of ${ARCHIVE_NAME} failed..." || exit $?
 fi
 
-test_sha1sum "${ARCHIVE_SHA1}" "${ARCHIVE_NAME}"
-assert_success "SHA1 mismatch. Try redownloading the archive..." || exit $?
+test_md5sum "${ARCHIVE_MD5}" "${ARCHIVE_NAME}"
+assert_success "MD5 mismatch. Try redownloading the archive..." || exit $?
 
 echo ">> Unpacking..."
 ${UNZIP} -u -q "${ARCHIVE_NAME}" -d "${UNPACKED_NAME}"
